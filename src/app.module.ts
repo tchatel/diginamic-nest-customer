@@ -14,6 +14,7 @@ import { Customer } from './customers/customer.entity';
       username: 'nest',
       password: 'nest',
       database: 'nestdb',
+      schema: 'nest', //Choose a specfic schema (default: public)
       entities: [Customer],
       synchronize: true,
     }),
