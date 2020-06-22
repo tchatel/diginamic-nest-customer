@@ -12,7 +12,7 @@ export class Customer {
     @Column({length: 50})
     lastname: string;
     
-    @Column({length: 0})
+    @Column({length: 200, nullable: true})
     email: string;
     
     toString(): string {

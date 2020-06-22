@@ -1,5 +1,7 @@
-import { Controller, Get, Param, Delete, Post, Put } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Post, Put, Body } from '@nestjs/common';
 import { CustomersService } from './customers.service';
+import { Customer } from './customer.entity';
+import { CustomerDto } from './customer.dto';
 
 @Controller('customers')
 export class CustomersController {
@@ -8,7 +10,7 @@ export class CustomersController {
     }
 
     @Get()
-    getList() {
+    getList(): Promise<Customer[]> {
         return this.customersDb.getList();
     }
 
@@ -18,8 +20,8 @@ export class CustomersController {
     }
 
     @Post()
-    add() {
-        return 'TODO: ajouter un client';
+    add(@Body() customerDto: CustomerDto): Promise<Customer> {
+        return this.customersDb.create(customerDto);
     }
 
     @Put(':id')
