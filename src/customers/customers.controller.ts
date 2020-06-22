@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete, Post, Put, Body } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Post, Put, Body, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { Customer } from './customer.entity';
 import { CustomerDto } from './customer.dto';
@@ -15,8 +15,8 @@ export class CustomersController {
     }
 
     @Get(':id')
-    getOne(@Param('id') id: string) {
-        return 'TODO: renvoyer un client (par id)';
+    getOne(@Param('id', ParseIntPipe) id: number) {
+        return this.customersDb.getOne(id);
     }
 
     @Post()
@@ -25,13 +25,14 @@ export class CustomersController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string) {
+    update(@Param('id', ParseIntPipe) id: number) {
         return 'TODO: modifier un client (par id)';
     }
 
     @Delete(':id')
-    delete(@Param('id') id: string) {
-        return 'TODO: supprimer un client (par id)';
+    @HttpCode(HttpStatus.NO_CONTENT)
+    delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+        return this.customersDb.delete(id);
     }
 
 }
