@@ -27,6 +27,14 @@ export class CustomersService {
         return this.customerRepository.save(customerDto);
     }
 
+    async update(id: number, 
+           customerDto: CustomerDto): Promise<void> {
+        const result = await this.customerRepository.update(id, customerDto);
+        if (result.affected === 0) {
+            throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+        } 
+    }
+
     async delete(id: number): Promise<void> {
         const result = await this.customerRepository.delete(id);
         if (result.affected === 0) {

@@ -1,9 +1,10 @@
-import { Controller, Get, Param, Delete, Post, Put, Body, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Post, Put, Body, ParseIntPipe, HttpCode, HttpStatus, ValidationPipe, UsePipes } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { Customer } from './customer.entity';
 import { CustomerDto } from './customer.dto';
 
 @Controller('customers')
+@UsePipes(new ValidationPipe({whitelist: true, forbidNonWhitelisted: true}))
 export class CustomersController {
 
     constructor(private customersDb: CustomersService) {
@@ -25,8 +26,10 @@ export class CustomersController {
     }
 
     @Put(':id')
-    update(@Param('id', ParseIntPipe) id: number) {
-        return 'TODO: modifier un client (par id)';
+    @HttpCode(HttpStatus.NO_CONTENT)
+    update(@Param('id', ParseIntPipe) id: number,
+           @Body() customerDto: CustomerDto): Promise<void> {
+        return this.customersDb.update(id, customerDto);
     }
 
     @Delete(':id')
